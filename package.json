@@ -1,0 +1,19 @@
+{
+  "name": "php-workbook",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "npx gulp",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "gulp-markdown-html-presentation": "0.0.1",
+    "gulp": "^4.0.0",
+    "gulp-insert": "^0.5.0",
+    "gulp-rename": "^1.4.0",
+    "gulp-md-to-html": "^1.0.1"
+  }
+}

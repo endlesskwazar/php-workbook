@@ -1,10 +1,22 @@
 # PHP Workbook
 
-1. [Основи php](01-basic.html)
-2. [Робота з HTTP, SESSION, COOKIE](02-http.html)
-3. [Концепції ООП в PHP](03-oop.html)
-4. [Робота із базою даних](04-db.html)
-5. [Laravel](05-laravel-basic.html)
-6. [Laravel: Робота із базами даних.](06-eluqolent.html)
-7. [Laravel: Нотифікація, подіх, задачі](07-notifications-events-jobs.html)
-8. [Laravel: RESTfull. L5Repository, Laravel Resources](08-laravel-rest.html)
+# Зміст
+
+|Лекція|Пояснення|
+|-|-|
+|1. [Основи PHP](01-basic.html)|В даній лекції ми познайомимося з основами мови програмування **PHP**.|
+|2. [Робота з HTTP, SESSION, COOKIE](02-http.html)|В даній лекції ми дізнаємося як в PHP можна **обробляти запити**, працювати із **COOKIE**, **SESSION**.|
+|3. [Концепції ООП в PHP](03-oop.html)|В даній лекції ми розглянемо як PHP реалізує концепції **ООП**.|
+|4. [Робота із базою даних](04-db.html)|В даній лекції ми дізнаємося як в PHP можна працювати із **реляційнимим базами даних**.|
+|5. [Laravel](05-laravel-basic.html)|В даній лекції ми познайомимося із одним із найпопулярніших фремворків - **Laravel**. |
+|6. [Laravel: Робота із базами даних.](06-eluqolent.html)|В даній лекції ми познайомимося із **Eloquent** - ORM, який використовується в Laravel.|
+|7. [Laravel: Нотифікація, події, задачі](07-notifications-events-jobs.html)| В даній лекції ми познайомимося із **нотифікаціями**, **подіями** і **задачами** в Laravel.|
+|8. [Laravel: RESTfull. L5Repository, Laravel Resources](08-laravel-rest.html)|В даній лекції ми розглянемо як реалізувати **RESTfull - веб сервіс** за допомогою Laravel.|
+
+
+
+
+
+
+
+

@@ -103,23 +103,23 @@ echo 'Привет, ' . htmlspecialchars($_GET["name"]) . '!';
 
 
 ### HTTP GET
-form.php:
+**form.php**:
 ```php
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
-</head>
-<body>
-    <form action="form_process.php">
-    name: <input type="text" name="name" />
-    <input type="submit" value="Submit">
-    </form>
-</body>
-</html>
+&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+&lt;head&gt;
+    &lt;meta charset=&quot;UTF-8&quot;&gt;
+    &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;
+    &lt;meta http-equiv=&quot;X-UA-Compatible&quot; content=&quot;ie=edge&quot;&gt;
+    &lt;title&gt;Document&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;form action=&quot;form_process.php&quot;&gt;
+    name: &lt;input type=&quot;text&quot; name=&quot;name&quot; /&gt;
+    &lt;input type=&quot;submit&quot; value=&quot;Submit&quot;&gt;
+    &lt;/form&gt;
+&lt;/body&gt;
+&lt;/html&gt;
 ```
 
 
@@ -173,10 +173,6 @@ name1=value1&name2=value2
 echo 'Привет ' . htmlspecialchars($_POST["name"]) . '!';
 ?>
 ```
-
-
-### Інші HTTP - методи
-Інші HTTP - методи
 
 
 ### Інші HTTP - методи
@@ -276,5 +272,117 @@ header("HTTP/1.0 404 Not Found");
 ## Робота із COOKIE
 
 
-## Робота із COOKIE
+### Робота із COOKIE
 > Cookie (кукі) представляють невеликі набори даних (не більше 4 кбайт), за допомогою яких веб-сайт може зберегти на комп'ютері користувача будь-яку інформацію. За допомогою куки можна відстежувати активність користувача на сайті: залягання користувач на сайті чи ні, відстежувати історію його візитів і т.д.
+
+
+### Робота із COOKIE
+![](../resources/img/http/img-6.png)
+
+
+### Встановлення Cookie
+Для збереження Cookie на комп'ютері користувача використовується функція setcookie (). Вона має таке визначення:
+
+```php
+bool setcookie(string $name, string $value, int $expire, 
+	string $path, string $domain, bool $secure, bool $httponly);
+```
+
+
+### Встановлення Cookie
+- **name**: ім'я cookie, яке буде використовуватися для доступу до його значення
+- **value**: значення або вміст cookie - будь-який алфавітно-цифровий текст не більше 4 кбайт
+- **expire** (необов'язковий параметр): термін дії, після якого cookie знищуються. Якщо даний параметр не встановлений або дорівнює 0, то знищення cookie відбувається після закриття браузера.
+- **path** (необов'язковий параметр): шлях до каталогу на сервері, для якого будуть доступні cookie. Якщо задати '/', cookie будуть доступні для всього сайту. Якщо задати, наприклад, '/ mydir /', cookie будуть доступні тільки з каталогу / mydir / 'і всіх його підкаталогів. Заводський параметр є поточний каталог, в якому встановлюються cookie.
+
+
+### Встановлення Cookie
+- **domain** (необов'язковий параметр): задає домен, для якого будуть доступні cookie. Якщо це домен другого рівня, наприклад, localhost.com, то cookie доступні для всього сайту localhost.com, в тому числі і для його піддоменів типу blog.localhost.com.
+- **secure** (необов'язковий параметр): вказує на те, що значення cookie має передаватися по протоколу HTTPS. Якщо задано true, cookie від клієнта буде передано на сервер, тільки якщо встановлено захищене з'єднання. За замовчуванням дорівнює false.
+- **httponly** (необязательный параметр): если равно true, cookie будут доступны только через http протокол. То есть cookie в этом случае не будут доступны скриптовым языкам, например, JavaScript. По умолчанию параметр равен false
+
+
+### Встановлення Cookie
+```php
+$key = 'message';
+$value = 'Hello World';
+setcookie($key, $value);
+setcookie('temp','temp', time()+3600); // срок дії 1 година
+```
+
+
+### Читання переданих Cookie
+Щоб отримати cookie, можна використовувати глобальний асоціативний масив $_COOKIE:
+
+```php
+if (isset($_COOKIE['message'])) echo $_COOKIE['message']);
+```
+
+
+### Видалення Cookie
+Для видалення cookie досить в якості терміну дії вказати будь-який час в минулому:
+
+```php
+setcookie ("message", "", time() - 3600);
+```
+
+
+### Реалізація авторизація за допомогою Cookie
+![](../resources/img/http/img-1.jpeg)
+
+- Репозиторій: [php-examples](https://github.com/endlesskwazar/php-examples.git)
+- Гілка: cookie-auth
+
+
+
+## Робота із SESSION
+
+
+### Робота із SESSION
+Сесії є простим способом зберігання інформації для окремих користувачів з унікальним ідентифікатором сесії. Це може використовуватися для збереження стану між запитами сторінок. Ідентифікатори сесій зазвичай відправляються браузеру через сесійний cookie і використовуються для отримання наявних даних сесії. Відсутність ідентифікатора сесії або сесійного cookie повідомляє PHP про те, що необхідно створити нову сесію і згенерувати новий ідентифікатор сесії.
+
+
+### Робота із SESSION
+Сесії використовують просту технологію. Коли сесія створена, PHP буде або отримувати існуючу сесію, використовуючи переданий ідентифікатор (зазвичай із сесійної cookie) або, якщо нічого не передавалося, буде створена нова сесія. PHP заповнить суперглобального змінну $ _SESSION сесійного інформацією після того, як буде запущена сесія. Коли PHP завершує роботу, він автоматично серіалізуются вміст суперглобального змінної $ _SESSION і відправить для збереження, використовуючи сесійну обробник для запису сесії.
+
+
+### Робота із SESSION
+За замовчуванням PHP використовує внутрішній обробник files для збереження сесій, який встановлений в INI-змінної session.save_handler. Цей оброблювач зберігає дані на сервері в директорії, зазначеної в конфигурационной директиві session.save_path.
+
+
+### Робота із SESSION
+Сесії можуть запускатися вручну за допомогою функції session_start (). Якщо директива session.auto_start встановлена ​​в 1, сесія автоматично запуститься, на початку запиту.
+
+
+### Робота із SESSION
+Сесія зазвичай завершує свою роботу, коли PHP закінчує виконувати скрипт, але може бути завершена і вручну за допомогою функції session_write_close ().
+
+
+### Робота із SESSION
+```php
+&lt;?php
+session_start();
+if (!isset($_SESSION['count'])) {
+  $_SESSION['count'] = 0;
+} else {
+  $_SESSION['count']++;
+}
+```
+
+
+### Робота із SESSION
+**Видалення змінної із сесії**:
+```php
+&lt;?php
+session_start();
+unset($_SESSION['count']);
+```
+
+
+### Реалізація авторизації за допомогою Cookie і Session
+![](../resources/img/http/img-7.png)
+
+
+### Реалізація авторизації за допомогою Cookie і Session
+- Репозиторій: [php-examples](https://github.com/endlesskwazar/php-examples.git)
+- Гілка: session-auth

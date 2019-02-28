@@ -8,6 +8,36 @@ ${toc}
 
 ## Опис класу і ініціалізація об'єкту
 
+Для створення класу використовується ключове слово class:
+
+```php
+<?php
+class Foo {
+    public $aMemberVar = 'aMemberVar Member Variable';
+    public $aFuncName = 'aMemberFunc';
+   
+   
+    function aMemberFunc() {
+        print 'Inside `aMemberFunc()`';
+    }
+} 
+```
+
+Для ініціалізації класу використовується ключове слово new:
+
+```php
+$foo = new Foo;
+```
+
+Для доступу до полів класу використовується оператор стрілка(->):
+
+```php
+<?php
+$element = 'aMemberVar';
+print $foo->$element;
+?> 
+```
+
 ### Конструктор
 
 PHP 5 дозволяє оголошувати методи-конструктори. Класи, в яких оголошено метод-конструктор, будуть викликати цей метод при кожному створенні нового об'єкта, так що це може виявитися корисним, наприклад, для ініціалізації будь-якого стану об'єкта перед його використанням.
@@ -43,9 +73,75 @@ $obj = new MyDestructableClass();
 
 ### Статичні поля та методи
 
+Оголошення властивостей і методів класу статичними дозволяє звертатися до них без створення екземпляра класу. Властивість класу, оголошене як статичне, не може бути доступно за допомогою екземпляра класу (але статичний метод може бути викликаний).
+
+З метою сумісності з PHP 4, якщо визначення області видимості не використовується, то властивість або метод будуть оброблятися так, як якщо б він був оголошений як public.
+
+```php
+
+<?php
+class Foo {
+    public static function aStaticMethod() {
+        // ...
+    }
+}
+
+Foo::aStaticMethod();
+$classname = 'Foo';
+$classname::aStaticMethod(); // PHP 5.3.0
+?>
+
+```
+
 ## Інкапсуляція
 
+**Інкапсуляція** (encapsulation) - це механізм, який об'єднує дані і код, який маніпулює зтім даними, а також захищає і те, і інше від зовнішнього втручання або неправильного використання.
+
+![](../resources/img/oop/img-2.png)
+
+На відміну від класів і функцій PHP, ми повинні чітко вказати модифікатори доступу для змінних класу PHP. Наприклад, наступний код є недійсним, що призведе до помилки розбору PHP.
+
+```php
+class Toys {
+$categories = array("puzzles","pull back","remote","soft");
+...
+}
+```
+
+
+```php
+class Toys {
+public $categories = array("puzzles","pull back","remote","soft");
+...
+}
+```
+
 ## Наслідування
+
+Новий клас породжується від існуючого, званого базовим класом. Похідний клас використовує члени базового класу, але може також змінювати і доповнювати їх.
+
+```php
+class Foo
+{
+    public function printItem($string)
+    {
+        echo 'Foo: ' . $string . PHP_EOL;
+    }
+    
+    public function printPHP()
+    {
+        echo 'PHP просто супер.' . PHP_EOL;
+    }
+}
+
+class Bar extends Foo
+{
+    public function printItem($string)
+    {
+        echo 'Bar: ' . $string . PHP_EOL;
+    }
+}
+```
 
 ### Виклик контруктора батьківського класа
 
@@ -72,6 +168,48 @@ class OtherSubClass extends BaseClass {
 ```
 
 ## Абстрактні класи та інтерфейси
+
+### Абстрактні клас
+
+**Абстрактний клас** в об'єктно-орієнтованому програмуванні - базовий клас, що не передбачає створення екземплярів.
+
+```php
+abstract class AbstractClass
+{
+    abstract protected function getValue();
+    abstract protected function prefixValue($prefix);
+
+    public function printOut() {
+        print $this->getValue() . "\n";
+    }
+}
+
+class ConcreteClass1 extends AbstractClass
+{
+    protected function getValue() {
+        return "ConcreteClass1";
+    }
+
+    public function prefixValue($prefix) {
+        return "{$prefix}ConcreteClass1";
+    }
+}
+```
+
+### Інтерфейси
+
+**Інтерфейс** (англ. Interface) - програмна / синтаксична структура, що визначає відношення між об'єктами, які поділяють певну множину поведінок і не пов'язані ніяк інакше.
+
+interface iTemplate
+{
+    public function setVariable($name, $var);
+    public function getHtml($template);
+}
+
+
+### abstract vs interface
+
+![](../resources/img/oop/img-3.png)
 
 ## Трейти
 
@@ -225,19 +363,62 @@ class Couch extends Furniture {
 
 ## Поліморфізм
 
+Якщо говорити коротко, **поліморфізм** - це здатність об'єкта використовувати методи похідного класу, який не існує на момент створення базового.
+
+```php
+abstract class Writer{
+    public function write();
+}
+```
+
 # Простір імен та імпортування класів
+
+**Repository.php**:
+```php
+<?php
+
+namespace App\Repository;
+
+class Repository{
+
+}
+```
+
+**Service.php**:
+```php
+<?php
+
+namespace App\Service;
+
+require_once('Repository.php');
+
+use App\Repository\Repository;
+
+use App\Repository\Repository as Banana;
+
+class Service{
+
+    private $repository;
+
+    public function __construct(){
+        $this->repository = new Repository;
+    }
+
+}
+```
+
 
 # PSR
 
+PSR - це абревіатура від Proposing a Standards Recommendation (пропоновані рекомендації стандартів), які були розроблені групою PHP Framework Interoperability Group, відома як PHP-FIG. У число учасників підтримують стандарти входять такі відомі проекти як: phpBB, PEAR, Doctrine, Composer, Propel, CakePHP, Symfony, phpDocumentor, Zend і т.д.
+
 ## PSR-0
 
-## PSR-1
+Нижче описані обов'язкові вимоги, яких слід дотримуватися в Автозавантажувач для взаємодії.
 
-## PSR-2
+## PSR-1 PSR-2 PSR-3 PSR-4
 
-## PSR-3
-
-## PSR-4
+Переклади PSR можна подивитися за посиланям [PSR](https://svyatoslav.biz/misc/psr_translation/#_PSR-0)
 
 # Composer
 

@@ -468,6 +468,8 @@ while ($test = $result->fetch()) {
 
 ## Авторизація із використоанням хешування
 
+- Репозиторій [https://github.com/endlesskwazar/php-examples](php-examples)
+- гілка auth-hash
 
 
 # Домашня робота

@@ -230,23 +230,294 @@ php artisan make:controller [Namespace][Name]Controller
 
 ## Маршрут як контроллер
 
-Для створення маршруту до контролера, точноше до його методу використовується наступний синтаксис:
+Для створення маршруту до контролера, точніше до його методу використовується наступний синтаксис:
 
 ```php
 Route::[httpMethod]('[route]', '[controller_name]@controller_method');
 ```
 
 ```php
-
+Route::get('foo', 'FooController@index');
 ```
 
 ## Отримання POST - параметрів
 
 ### CSRF - token
 
+«Класичний» сценарій атаки такий:
+- Вася є залогіненним на сайт, припустимо, mail.com. У нього є сесія в куках.
+- Вася потрапив на «злий» сайт, наприклад хакер запросив його зробити лист.
+- На злій сторінці знаходиться форма такого виду:
+
+```html
+<form action="http://mail.com/send" method="POST">
+  <input type="hidden" name="message" value="Сообщение">
+  ...
+</form>
+```
+
+- При заході на злу сторінку JavaScript викликає form.submit, відправляючи таким чином форму на mail.com.
+- Сайт mail.com перевіряє куки, бачить, що відвідувач авторизований і обробляє форму. В даному прикладі форма передбачає посилку повідомлення.
+
+Підсумок атаки - Вася, зайшовши на злу сторінку, ненароком відправив лист від свого імені. Вміст листа сформовано хакером.
+
+Типовий спосіб захисту сайтів - це «секретний ключ» (secret), спеціальне значення, яке генерується випадковим чином і зберігається в сесії відвідувача. Його знає тільки сервер, відвідувачеві ми його навіть не будемо показувати.
+
+Потім на основі ключа генерується «токен» (token). Токен робиться так, щоб з одного боку він був відмінний від ключа, зокрема, може бути багато токенов для одного ключа, з іншого - щоб було легко перевірити по токені, згенерований він на основі даного ключа чи ні.
+
+Для кожного токена потрібно додаткове випадкове значення, яке називають «сіль» salt.
+
+### Blade views
+
+**Blade** - простий, але потужний шаблонизатор, що поставляється з Laravel. На відміну від інших популярних шаблонизатор для PHP Blade не обмежує вас у використанні чистого PHP-коду в ваших виставах. Насправді все уявлення Blade скомпільовані в чистий PHP-код і кеш, поки в них немає змін, а значить, Blade практично не навантажує вашу програму. Файли уявлень Blade використовують розширення .blade.php і зазвичай зберігаються в папці resources / views.
+
+FooController.php:
+```php
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+
+class FooController extends Controller
+{
+    public function index(){
+        return "foo index";
+    }
+
+    public function edit(){
+        return view('foo');
+    }
+}
+```
+
+foo.blade.php:
+```html
+<form method="post">
+
+@csrf
+
+<label for="">Name:</label>
+<input type="text" name="name" /><br>
+
+<input type="submit"/>
+
+</form>
+```
+
+### Отримання POST - параметрів
+
+Щоб отримати екземпляр поточного запиту HTTP через інжекцію залежностей, ви повинні набрати підказку класу Illuminate\Http\Request на своєму конструкторі або методі контролера. Поточний екземпляр запиту буде автоматично введений службовим контейнером:
+
+routes:
+```php
+Route::get('/', function () {
+    return view('welcome');
+});
+
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');
+Route::get('foo', 'FooController@index');
+Route::get('foo/edit', 'FooController@edit');
+Route::post('foo/edit', 'FooController@store');
+```
+
+FooController:
+```php
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+
+class FooController extends Controller
+{
+    public function index(){
+        return "foo index";
+    }
+
+    public function edit(){
+        return view('foo');
+    }
+
+    public function store(Request $request){
+        $name = $request->input("name");
+        return $name;
+    }
+}
+```
+
+
 ### Валідація запитів
 
+Laravel поставляється з простою, зручною системою валідації (перевірки вхідних даних на відповідність правилам) і отримання повідомлень про помилки - класом Validation.
+
+FooController:
+```php
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+
+class FooController extends Controller
+{
+    public function index(){
+        return "foo index";
+    }
+
+    public function edit(){
+        return view('foo');
+    }
+
+    public function store(Request $request){
+        $request::validate(
+            array('name' => 'required'),
+        );
+    }
+}
+```
+
+foo.blade.php:
+```php
+@if ($errors->any())
+    <div class="alert alert-danger">
+        <ul>
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
+
+<form method="post">
+
+@csrf
+
+<label for="">Name:</label>
+<input type="text" name="name" /><br>
+
+<input type="submit"/>
+
+</form>
+```
+
+### Перевизначення Request
+
+Для більш складних сценаріїв перевірки можна створити "запит форми". Запити форми - це спеціальні класи запитів, які містять логіку перевірки. Щоб створити клас запиту форми, скористайтеся командою make:request:
+
+```
+php artisan make:request FooRequest
+```
+
+FooController:
+```php
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+use App\Http\Requests\FooRequest;
+
+class FooController extends Controller
+{
+    public function index(){
+        return "foo index";
+    }
+
+    public function edit(){
+        return view('foo');
+    }
+
+    public function store(FooRequest $request){
+
+        // The incoming request is valid...
+
+        // Retrieve the validated input data...
+         $validated = $request->validated();
+    }
+}
+
+```
+
 # Blade
+
+## Передача параметрів в blade
+
+FooController:
+```php
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+use App\Http\Requests\FooRequest;
+
+class FooController extends Controller
+{
+    public function index(){
+        return "foo index";
+    }
+
+    public function edit(){
+        return view('foo');
+    }
+
+    public function store(FooRequest $request){
+
+        // The incoming request is valid...
+
+        // Retrieve the validated input data...
+         $validated = $request->validated();
+
+         $some1 = 1;
+         $some2 = ['name', 'qwe'];
+
+         return view('result', [
+            'some1' => $some1,
+            'some2' => $some2
+         ]);
+    }
+}
+```
+
+result.blade.php:
+```blade
+{{ $some1 }}
+```
+
+## Умовні оператори
+
+```blade
+@if (count($records) === 1)
+    I have one record!
+@elseif (count($records) > 1)
+    I have multiple records!
+@else
+    I don't have any records!
+@endif
+```
+
+## Цикли
+
+```blade
+@for ($i = 0; $i < 10; $i++)
+    The current value is {{ $i }}
+@endfor
+
+@foreach ($users as $user)
+    <p>This is user {{ $user->id }}</p>
+@endforeach
+```
+
+## Чистий php-код
+
+```blade
+@php
+{{-- php code here --}}
+@endphp
+```
 
 # Домашня робота
 
@@ -272,7 +543,6 @@ Route::[httpMethod]('[route]', '[controller_name]@controller_method');
     doctor_id: required, unsigned
 }
 5. {
-    
+    phoneModel: required,
+    is4Gsupported: required
 }
-
-# Контрольні запитання

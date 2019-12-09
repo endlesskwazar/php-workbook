@@ -22,3 +22,17 @@
 5. Матеріали знаходяться в директорії dist:
    1. dist/workbook - конспект лекцій і методичні вказівки до виконання лабораторних робіт
    2. dist/presentations - презентації
+
+# TODO
+
+1. [ ] - Додати інформацію про встановлення і запуск php скриптів на дев сервері в basic
+2. [ ] - Пофіксить приклад із composer і PSR
+3. [ ] - Презентація для mysqli, pdo
+4. [ ] - Переписати всі приклади, в яких використовується бд на sqlite
+5. [ ] - Презентація для laravel basics
+6. [ ] - Більше інформації про зв'язки в eluqolent
+7. [ ] - Презентація для eluqolent
+8. [ ] - Лекція для notifications,events,jobs
+9. [ ] - Презентація для notifications,events,jobs
+10. [ ] - Видалити SOAP із laravel_resources, jwt_auth
+11. [ ] - Переписати інформацію про REST в laravel_resources, jwt_auth

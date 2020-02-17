@@ -806,27 +806,13 @@ foreach($obj as $key => $value){
 
 # Домашня робота
 
-Створіть скрипт index.php з наступним вмістом:
+Відкрийте [repl.it](https://repl.it/). Створіть новий repl -  PHP Web server:
 
-```php
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
-</head>
-<body>
-    <?php
-    //PHP - код
+![](../resources/img/basic/6.png)
 
-    ?>
-</body>
-</html>
-```
+Всередині тега <?php > реалізайте завдання згідно із варіантом:
 
-Всередині тега <?php > реалізайте завдання згідно із варіантом.
+![](../resources/img/basic/7.png)
 
 ## Варіанти
 

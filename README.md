@@ -36,13 +36,14 @@
 # TODO
 
 1. [X] - Додати інформацію про встановлення і запуск php скриптів на дев сервері в basic
-2. [ ] - Пофіксить приклад із composer і PSR
-3. [ ] - Презентація для mysqli, pdo
-4. [ ] - Переписати всі приклади, в яких використовується бд на sqlite
-5. [ ] - Презентація для laravel basics
-6. [ ] - Більше інформації про зв'язки в eluqolent
-7. [ ] - Презентація для eluqolent
-8. [ ] - Лекція для notifications,events,jobs
-9. [ ] - Презентація для notifications,events,jobs
-10. [X] - Видалити SOAP із laravel_resources
-11. [ ] - Переписати інформацію про REST в laravel_resources, jwt_auth
+2. [ ] - Скопіювати інформацію про встановлення PHP в презентацію http
+3. [ ] - Пофіксить приклад із composer і PSR
+4. [ ] - Презентація для mysqli, pdo
+5. [ ] - Переписати всі приклади, в яких використовується бд на sqlite
+6. [ ] - Презентація для laravel basics
+7. [ ] - Більше інформації про зв'язки в eluqolent
+8. [ ] - Презентація для eluqolent
+9. [ ] - Лекція для notifications,events,jobs
+10. [ ] - Презентація для notifications,events,jobs
+11. [X] - Видалити SOAP із laravel_resources
+12. [ ] - Переписати інформацію про REST в laravel_resources, jwt_auth

@@ -522,7 +522,7 @@ composer init
 Виконайте команду:
 
 ```
-composer install
+composer require monolog/monolog
 ```
 
 Вона підтягне залежності composer і створить файл автозагрузки.
@@ -530,32 +530,54 @@ composer install
 
 ## Включення завантаження класів
 
-Для бібліотек, які вказують інформацію про автозавантаження, Composer створює файл vendor / autoload.php. Ви можете просто включити цей файл і почати використовувати класи, що надаються цими бібліотеками без додаткової роботи:
+Для бібліотек, які вказують інформацію про автозавантаження, Composer створює файл vendor/autoload.php. Ви можете просто включити цей файл і почати використовувати класи, що надаються цими бібліотеками без додаткової роботи:
 
 ```php
-require __DIR__ . '/vendor/autoload.php';
+<?php
+require 'vendor/autoload.php';
 
-$log = new Monolog\Logger('name');
-$log->pushHandler(new Monolog\Handler\StreamHandler('app.log', Monolog\Logger::WARNING));
-$log->addWarning('Foo');
+use Monolog\Logger;
+use Monolog\Handler\StreamHandler;
+
+$log = new Logger('name');
+$log->pushHandler(new StreamHandler('warning.log', Logger::WARNING));
+$log->warning('Foo');
 ```
 
-Ви навіть можете додати свій власний код до автозавантажувача, додавши поле autoload до composer.json.
+Ви навіть можете додати свій власний код до автозавантажувача. Помістіть класи, які ми хочемо завантажити автоматично, у виділений каталог. Наприклад, прийнято скликати класи, які ми записуємо в каталог, який називається src /.
 
-```json
-{
-    "autoload": {
-        "psr-4": {"Acme\\": "src/"}
+![](../resources/img/oop/img-5.png)
+
+**Db.php:**
+```php
+<?php
+
+namespace App\Core;
+
+class Db {
+    public function getUrl() {
+        return "mysql://localhost/shop";
     }
 }
 ```
 
-Після додавання поля autoload потрібно повторно запустити **dump-autoload**, щоб повторно створити файл vendor / autoload.php.
+Зв'яжіть простір імен на src/ каталог у файлі composer.json. Ми вказуємо каталог, який містить класи, на простір імен у файлі composer.json. Наприклад, саме так ми визначаємо у файлі composer.json, що ми надали простір імен App класам у src/ директорії:
+
+```json
+"autoload": {
+        "psr-4": {
+            "App\\": "src/"
+        }
+    }
+}
+```
+
+Після додавання поля autoload потрібно повторно запустити **composer dumpautoload -o**, щоб повторно створити файл vendor / autoload.php.
 
 
 # Домашнє завдання
 
-Продемонструйте принципи ООП(інкапсуляція, наслідування, поліморфізм) за допомогою мови php.
+Продемонструйте принципи ООП(інкапсуляція, наслідування, поліморфізм) за допомогою мови php. Для імпортування класів використайте composer.
 
 # Контрольні запитання
 
